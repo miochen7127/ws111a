@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <style>
+        .textarea1{
+            resize:none;
+            width:800px;
+            height:50px;
+            float: right;
+            position: relative;
+            right: 150px;
+        }
+        .list{
+            resize:none;
+            width:300px;
+            height:500px;
+            float: left;
+            position: relative;
+        }
+        button{
+            float: right;
+            position: relative;
+            left: 710px;
+            top: 40px;
+        }
+        .result{
+            resize:none;
+            width:800px;
+            height:450px;
+            position: relative;
+        }
+    </style>
+    <body>
+        <!-- <script>
+        window.onload = load;
+
+        async function load()
+        {
+            let screen = document.getElementById("list");
+            let output = await window.fetch("/sqlite/.tables");
+
+            screen.innerText = JSON.stringify(await output.json(), null, 4);
+        }
+
+        </script> -->
+        <table>
+            <span>
+                <textarea class="list" readonly="readonly" id = "list">表格列表:</textarea>
+                <span>
+                    <textarea class="textarea1" id = "SQL" >輸入sql命令:</textarea>
+                    <button id="submit" onclick="sqlRun()">執行</button>
+                </span>
+                <textarea class="result" readonly="readonly" id="result">執行結果:</textarea>
+            </span>
+        </table>
+    </body>
+    <script src="main.js"></script>
+</html>
