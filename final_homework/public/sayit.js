@@ -1,6 +1,5 @@
 window.onhashchange = async function () {
     var tokens = window.location.hash.split('/')
-    var user
     switch (tokens[0]) {
         case '#home':
             await homeweb()
@@ -69,8 +68,7 @@ window.onload = function () {
                 </select>
             </span>
             <span>
-                <input type="submit" value="確認" id="btn1" name="btn1">
-                <input type="submit" value="重置" id="btn2" name="btn2">
+                <input type="submit" value="確認" id="btn1" name="btn1" onclick="serverbuy()">
             </span>
             <div>
                 <textarea name="read" cols="50" rows="10" disabled id = "textarea" name="textarea"></textarea>
@@ -784,6 +782,31 @@ window.onload = function () {
 `)
   }
 
+  //<option value="床包$1000">床包$1000</option>
+  //<option value="床墊$3980">床墊$3980</option>
+  //<option value="棉被$1980">棉被$1980</option>
+  //<option value="枕頭$1280">枕頭$1280</option>
+
+  async function serverbuy(){
+    let product = Ui.id('select1').value
+    let number = Ui.id('select2').value
+    let money = 0;
+    let total = 0;
+    if(product == "床包$1000") money = 1000
+    else if(product == "床墊$3980") money = 3980
+    else if(product == "棉被$1980") money = 1980
+    else if(product == "枕頭$1280") money = 1280
+    total = money * number
+    let r = await Server.post('/shopping_car',{product,number,total})
+    console.log('serverbuy : r=',r)
+      if (r.status == Status.OK) {
+        alert('訂單已送出!')
+        //Ui.goto('#login')
+      } else {
+        alert('訂單未送出')
+      }
+  }
+
   async function serverSignup() {
     let user = Ui.id('user').value
     let password = Ui.id('password').value
@@ -811,7 +834,6 @@ window.onload = function () {
     if (r.status == Status.OK) {
       localStorage.setItem('user', user)
       Ui.goto('#home')
-      user = user
     } else
       alert('登入失敗: 請輸入正確的帳號密碼!')
   }

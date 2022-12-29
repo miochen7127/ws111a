@@ -9,6 +9,21 @@ server.public("/public")
 server.router.get('/', home)
 .post('/login', login)
 .post('/signup', signup)
+.post('/shopping_car',shopping_car)
+.get('/public/#order',order)
+
+async function order(ctx){
+  let user = await ctx.state.session.get('user')
+  console.log('user=', user)
+  ctx.response.body = await db.orderQuery('WHERE user=?', [user])
+}
+
+async function shopping_car(ctx){
+  const params = await bodyParams(ctx)
+  console.log('params=', params)
+  await db.orderSave({records:params.product,number:params.number,total_price:params.total})
+  sendStatus(ctx, Status.OK)
+}
 
 async function home(ctx) {
     ctx.response.redirect("/public/#home")
