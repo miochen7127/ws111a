@@ -10,18 +10,20 @@ server.router.get('/', home)
 .post('/login', login)
 .post('/signup', signup)
 .post('/shopping_car',shopping_car)
-.get('/public/#order',order)
+.get('/test/:user',test);
 
-async function order(ctx){
-  let user = await ctx.state.session.get('user')
-  console.log('user=', user)
-  ctx.response.body = await db.orderQuery('WHERE user=?', [user])
+async function test(ctx){
+  console.log('order_place');
+  let user = await db.orderQuery(ctx.params['user'])
+  console.log('user_order=', user)
+  ctx.response.type = 'text/html'
+  ctx.response.body = user
 }
 
 async function shopping_car(ctx){
   const params = await bodyParams(ctx)
   console.log('params=', params)
-  await db.orderSave({records:params.product,number:params.number,total_price:params.total})
+  await db.orderSave({user:params.user,records:params.product,number:params.number,total_price:params.total})
   sendStatus(ctx, Status.OK)
 }
 

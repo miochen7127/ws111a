@@ -18,6 +18,7 @@ window.onhashchange = async function () {
             break
         case '#order':
             await order()
+            getorder()
             break
         case '#brand':
             await brand()
@@ -38,9 +39,7 @@ window.onload = function () {
   async function brand(){
     Ui.show(`<iframe width="560" height="315" src="https://www.youtube.com/embed/M0iMPVokfrI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`)
   }
-  async function order(){
-    Ui.show(``)
-  }
+
   async function shopping_car() {
     Ui.show(`
     <!DOCTYPE html>
@@ -782,22 +781,33 @@ window.onload = function () {
 `)
   }
 
-  //<option value="床包$1000">床包$1000</option>
-  //<option value="床墊$3980">床墊$3980</option>
-  //<option value="棉被$1980">棉被$1980</option>
-  //<option value="枕頭$1280">枕頭$1280</option>
+  async function order(){
+    Ui.show(`
+    <div id="TEST">
+    </div>`)
+  }
+
+  async function getorder(){
+    let user = localStorage.getItem('user')
+    console.log('testing',user);
+    let r = await window.fetch(`/test/${user}`);
+    let r2 = await r.json();
+    var test = document.getElementById("TEST");
+    test.innerHTML+=`${r2}`;
+  }
 
   async function serverbuy(){
     let product = Ui.id('select1').value
     let number = Ui.id('select2').value
     let money = 0;
     let total = 0;
+    let user = localStorage.getItem('user')
     if(product == "床包$1000") money = 1000
     else if(product == "床墊$3980") money = 3980
     else if(product == "棉被$1980") money = 1980
     else if(product == "枕頭$1280") money = 1280
     total = money * number
-    let r = await Server.post('/shopping_car',{product,number,total})
+    let r = await Server.post('/shopping_car',{user,product,number,total})
     console.log('serverbuy : r=',r)
       if (r.status == Status.OK) {
         alert('訂單已送出!')

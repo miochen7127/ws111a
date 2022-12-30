@@ -7,16 +7,16 @@ export async function open() {
               (uid INTEGER PRIMARY KEY AUTOINCREMENT, 
                user TEXT, pass TEXT, email TEXT)`)
     db.query(`CREATE TABLE IF NOT EXISTS orders
-              (id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                records TEXT, number TEXT, total_price REAL)`);
+              (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user TEXT , records TEXT, number TEXT, total_price REAL)`);
               }
 
 export async function orderSave(order){
-  db.query(`INSERT INTO orders(records, number, total_price) VALUES (?,?, ?)`, [order.records,order.number , order.total_price])
+  db.query(`INSERT INTO orders(user,records, number, total_price) VALUES (?,?,?, ?)`, [order.user , order.records , order.number , order.total_price])
 }
 
-export async function orderQuery(){
-  let q = db.query('SELECT id,records,number, total_price FROM orders')
+export async function orderQuery(user){
+  let q = db.query('SELECT id,records,number, total_price FROM orders WHERE user = ?',[user])
   return q
 }
 
